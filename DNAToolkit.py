@@ -5,21 +5,21 @@
 nucleotides = ["A", "G", "T", "C"]
 
 # Simple check whether sequence is valid DNA string
-def validate_sequence(dna_seq):
+def validate_sequence(seq):
     # Ensure imported sequence is uppercase
-    to_check = dna_seq.upper()
+    to_check = seq.upper()
     for nuc in to_check:
         if nuc not in nucleotides:
             return False
     return True
 
 # Function should return the frequency of each nucleotide
-def count_nuc(dna_seq):
+def count_nuc(seq):
     # First validates sequence
-    if (validate_sequence(dna_seq)):
+    if (validate_sequence(seq)):
         freq_dict = {"A" : 0, "G" : 0, "T" : 0, "C" : 0}
         # Ensures dna_seq that is checked is in uppercase form
-        to_check = dna_seq.upper()
+        to_check = seq.upper()
         # For each nucleotide, add to dict where key = nuc
         for nuc in to_check:
             freq_dict[nuc] += 1
@@ -27,3 +27,12 @@ def count_nuc(dna_seq):
     # If the sequence is invalid...
     else:
         print("Error: Invalid sequence - cannot count!")
+
+# Simple function to transcript a DNA sequence into its RNA counterpart
+# TLDR: DNA -> RNA transcription = replacing Thyamine with Uracil
+def transcript_sequence(seq):
+    if validate_sequence(seq):
+        transcripted = seq.replace("T", "U")
+        return transcripted
+    else:
+        print("Error: Invalid sequence - cannot transcript!")
