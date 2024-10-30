@@ -1,8 +1,9 @@
 # DNA Toolkit file
-
-# List of nucleotides
-# Adenine Guanine Thymine and Cytosine
+# Constants
+# List of nucleotides: Adenine Guanine Thymine and Cytosine
 nucleotides = ["A", "G", "T", "C"]
+# Dictionary of complements: Maps each nucleotide to its complement
+nuc_complements = {"A" : "T", "G" : "C", "T" : "A", "C" : "G"}
 
 # Function to print information for a given DNA sequence
 def print_information(seq):
@@ -12,7 +13,8 @@ def print_information(seq):
     if isValid:
         print(f'[2]  Length: {len(seq)}')
         print(f'[3]  Nucleotide Frequencies: {count_nuc(seq)}')
-        print(f'[4]  DNA/RNA Transcription: {transcript_sequence(seq)}')
+        print(f'[4]  DNA -> RNA Transcription: {transcript_sequence(seq)}')
+        print(f'[5]  Reverse Complement: {reverse_complement(seq)}')
 
 
 # Simple check whether sequence is valid DNA string
@@ -47,3 +49,17 @@ def transcript_sequence(seq):
         return transcripted
     else:
         print("Error: Invalid sequence - cannot transcript!")
+
+# Reverse complement finder
+# Steps:
+# 1. Find complement string via nuc_complements
+# 2. Reverse the complement string
+def reverse_complement(seq):
+    if validate_sequence(seq):
+        complement = ''
+        for nuc in seq:
+            # Find the complement for the nucleotide, add it to the string
+            complement += nuc_complements[nuc]
+        return complement[::-1] # ::-1 to reverse (Python magic!)
+    else:
+        print("Error: Invalid sequence - cannot reverse complement!")
