@@ -1,24 +1,25 @@
 # DNA Toolkit file
 from constants import *
+from utilities import coloured
 
 # Function to print information for a given DNA sequence
 def print_information(seq):
     """Prints all information for an imported sequence"""
-    print("Sequence: " + seq)
+    print("Sequence: " + coloured(seq))
     isValid = validate_sequence(seq)
     print(f'[1] Is valid: {isValid}')
     if isValid:
         print(f"[2] Length: {len(seq)}")
-        print(f"[3] Nucleotide Frequencies: {count_nuc(seq)}")
-        print(f"[4] DNA -> RNA Transcription: {transcript_sequence(seq)}")
+        print(coloured(f"[3] Nucleotide Frequencies: {count_nuc(seq)})"))
+        print(f"[4] DNA -> RNA Transcription: {coloured(transcript_sequence(seq))}")
         
         # [5] was pretty much copied from this commit as it was awesome
         # https://gitlab.com/RebelCoder/dna-toolset/-/commit/8a4be0e3a70733be9bebdf0d9eed987c0fb44429
         
         print("[5] Reverse Complement:\n")
-        print(f"5' {(seq)} 3'")
+        print(f"5' {coloured(seq)} 3'")
         print(f"   {''.join(['|' for c in range(len(seq))])}")
-        print(f"3' {reverse_complement(seq)} 5'\n")
+        print(f"3' {coloured(reverse_complement(seq))} 5'\n")
 
 
 # Simple check whether sequence is valid DNA string
