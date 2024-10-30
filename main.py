@@ -14,9 +14,5 @@ dna_string = input.upper()
 # Invalid
 # dna_string = "Hello, world!"
 
-isValid = validate_sequence(dna_string)
+print_information(dna_string)
 
-print("DNA string '" + dna_string + "' is valid: " + str(isValid))
-if isValid:
-    count = count_nuc(dna_string)
-    print("Count: " + str(count))

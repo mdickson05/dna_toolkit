@@ -4,6 +4,17 @@
 # Adenine Guanine Thymine and Cytosine
 nucleotides = ["A", "G", "T", "C"]
 
+# Function to print information for a given DNA sequence
+def print_information(seq):
+    print("Sequence: " + seq)
+    isValid = validate_sequence(seq)
+    print(f'[1]  Is valid: {isValid}')
+    if isValid:
+        print(f'[2]  Length: {len(seq)}')
+        print(f'[3]  Nucleotide Frequencies: {count_nuc(seq)}')
+        print(f'[4]  DNA/RNA Transcription: {transcript_sequence(seq)}')
+
+
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
     # Ensure imported sequence is uppercase
