@@ -1,4 +1,5 @@
 # DNA Toolkit file
+from collections import Counter
 from constants import *
 from utilities import coloured
 
@@ -25,7 +26,9 @@ def print_information(input):
         print(f"5' {coloured(complement_seq[::-1])} 3' [Reverse Complement]\n")
         print(f"[6] GC Content: {gc_content(seq)}%")
         print(f"[7] GC Content of subsequences (window size = 5): {gc_content_subseq(seq, 5)}")
-
+        print(f"[8] Amino Acids Sequence from DNA sequence: {translate_seq(seq, 0)}")
+        print(f"[8] Codon frequency (L): {codon_frequency(seq, "L")}")
+        
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
     """Simple check to see whether the imported DNA string is valid"""
@@ -93,3 +96,36 @@ def gc_content_subseq(seq, window_size):
         subseq = seq[i : i + window_size]
         res.append(gc_content(subseq))
     return res
+
+# Function that translates imported DNA sequence to amino acid codons
+def translate_seq(seq, init_pos):
+    """Imports a DNA sequence and a starting position to translate a DNA string into amino acid codons"""
+    codons = []
+    # Starts at init_pos, finishes at len(seq) - 2 (to avoid reading past the last triplet), increments by 3.
+    for pos in range(init_pos, len(seq) - 2, 3):
+        codons.append(dna_codons[seq[pos:pos+3]])
+    return codons
+
+# Function that returns a frequency map of an imported amino acid within a DNA sequence
+def codon_frequency(seq, amino_acid):
+    """Returns a frequency map of an imported amino acid within an imported DNA sequence"""
+    temp_list = []
+   # Starts at init_pos, finishes at len(seq) - 2 (to avoid reading past the last triplet), increments by 3.
+    for i in range(0, len(seq) - 2, 3):
+        # Sequence to check is between i and i + 3
+        to_check = seq[i:i+3]
+        # If the codon value of to_check chars matches the imported amino_acid
+        if dna_codons[to_check] is amino_acid:
+            # add to temporary list
+            temp_list.append(to_check)
+
+    # Defines a dictionary where the keys are the values in temp_list
+    # And the values are their count within that list
+    frequency_map = dict(Counter(temp_list))
+    total_weight = sum(frequency_map.values())
+    for seq in frequency_map:
+        # Replaces the total count with their relative frequency within the list
+        # E.g. if CTG appears twice, and CTC appears once - CTG: 0.67, CTC: 0.33 
+        # 2 at the end is to signify rounding to 2dp
+        frequency_map[seq] = round(frequency_map[seq] / total_weight, 2)
+    return frequency_map
