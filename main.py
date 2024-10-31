@@ -1,12 +1,12 @@
 # Testing DNA Toolkit
 from DNAToolkit import *
-import random
+from sequences import sequence
 
-# Generate random valid dna_string
-input = ''.join([random.choice(nucleotides) for nuc in range(20)])
+
+
 
 # Always valid + uppercase
-dna_string = input.upper()
+# dna_string = input.upper()
 
 # Valid but not uppercase
 # dna_string = "AgTcAAc"
@@ -14,5 +14,10 @@ dna_string = input.upper()
 # Invalid
 # dna_string = "Hello, world!"
 
-print_information(dna_string)
+# Create new default sequence
+seq = sequence()
+# Generate random values
+seq.generate()
+# Print info for sequence
+seq.print_info()
 
