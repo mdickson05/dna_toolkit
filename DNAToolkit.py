@@ -11,8 +11,11 @@ def print_information(input):
     print(f'[1] Is valid: {isValid}')
     if isValid:
         seq = input.upper()
+        
         print(f"[2] Length: {len(seq)}")
+        
         print(coloured(f"[3] Nucleotide Frequencies: {count_nuc(seq)})"))
+        
         print(f"[4] DNA -> RNA Transcription: {coloured(transcript_sequence(seq))}")
         
         # [5] was pretty much copied from this commit as it was awesome
@@ -23,19 +26,28 @@ def print_information(input):
         print(f"   {''.join(['|' for c in range(len(seq))])}")
         print(f"3' {coloured(complement(seq))} 5' [Complement]")
         print(f"5' {coloured(reverse_complement(seq))} 3' [Reverse Complement]\n")
+        
         print(f"[6] GC Content: {gc_content(seq)}%")
+        
         print(f"[7] GC Content of subsequences (window size = 5): {gc_content_subseq(seq, 5)}")
+        
         print(f"[8] Amino Acids Sequence from DNA sequence: {translate_seq(seq, 0)}")
+        
         print(f"[9] Codon frequency (L): {codon_frequency(seq, "L")}")
+        
         print("[10] Reading frames:")
         rf = generate_reading_frames(seq)
-
         for frame in rf:
             print(frame)
-        print("[11] Protein analysis:")
-        for frame in rf:
-            print(find_rf_proteins(frame))
-        
+
+        print("[11] Available proteins:")
+        all_prots = all_proteins(seq, 0, 0, True)
+        if all_prots != []:
+            for prot in all_prots:
+                print(f"{prot}")
+        else:
+            print("No proteins found")
+
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
     """Simple check to see whether the imported DNA string is valid"""
@@ -187,3 +199,34 @@ def find_rf_proteins(aa_seq):
                 current_prot[i] += aa
 
     return proteins
+
+# Function to find all proteins within a given range
+def all_proteins(seq, startPos, endPos, ordered):
+    """Given a start and end position, finds all proteins within a sequence"""
+    # If sequence is invalid, return
+    if not validate_sequence(seq):
+        print("Error: Invalid sequence - cannot get reading frames!")
+        return
+    
+    # If there IS an start and end
+    if endPos > startPos:
+        rfs = generate_reading_frames(seq[startPos : endPos])
+    # If endPos and startPos are both == 0
+    elif endPos == startPos == 0:
+        rfs = generate_reading_frames(seq)
+    # If endPos < startPos == invalid
+    else:
+        print("Error: invalid startPos/endPos - cannot generate frames!")
+        return
+
+    res = []
+    for rf in rfs:
+        prots = find_rf_proteins(rf)
+        for p in prots:
+            res.append(p)
+
+    if ordered:
+        # Sort list by results, where key is the item's length 
+        # and the list is descending
+        return sorted(res, key=len, reverse=True)
+    return res
