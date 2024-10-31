@@ -22,7 +22,9 @@ def print_information(input):
         print(f"   {''.join(['|' for c in range(len(seq))])}")
         complement_seq = complement(seq)
         print(f"3' {coloured(complement_seq)} 5' [Complement]")
-        print(f"5' {coloured(complement_seq[::-1])} 3' [Reverse Complement]")
+        print(f"5' {coloured(complement_seq[::-1])} 3' [Reverse Complement]\n")
+        print(f"[6] GC Content: {gc_content(seq)}%")
+        print(f"[7] GC Content of subsequences (window size = 5): {gc_content_subseq(seq, 5)}")
 
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
@@ -71,4 +73,23 @@ def complement(seq):
             complement += nuc_complements[nuc.upper()]
         return complement
     else:
-        print("Error: Invalid sequence - cannot reverse complement!")
+        print("Error: Invalid sequence - cannot find complement!")
+
+# Simple function to return GC content of an DNA sequence
+def gc_content(seq):
+    """Function to return GC content of an imported DNA sequence"""
+    return round(((seq.count("G") + seq.count("C")) / len(seq)) * 100)
+
+# Function that calculates the GC content for a specific window of nucleotides
+# i.e. if len(seq) = 20, and k = 5, will find GC content for 1-5, 6-10, etc.
+def gc_content_subseq(seq, window_size):
+    """Given imported window size, find the GC content of each subsequence within 
+    each window for an imported DNA sequence"""
+    res = []
+    # for i in range 0 to len(seq) - window_size + 1
+    # Each iteration, i increases by window_size
+    for i in range(0, len(seq) - window_size + 1, window_size):
+        # subseq is between current i value and i + window_size
+        subseq = seq[i : i + window_size]
+        res.append(gc_content(subseq))
+    return res
