@@ -28,8 +28,13 @@ def print_information(input):
         print(f"[8] Amino Acids Sequence from DNA sequence: {translate_seq(seq, 0)}")
         print(f"[9] Codon frequency (L): {codon_frequency(seq, "L")}")
         print("[10] Reading frames:")
-        for frame in generate_reading_frames(seq):
+        rf = generate_reading_frames(seq)
+
+        for frame in rf:
             print(frame)
+        print("[11] Protein analysis:")
+        for frame in rf:
+            print(find_rf_proteins(frame))
         
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
@@ -150,3 +155,35 @@ def generate_reading_frames(seq):
     frames.append(translate_seq(reverse_complement(seq), 2))
 
     return frames
+
+# Function that finds the list of proteins within an amino acid sequence
+def find_rf_proteins(aa_seq):
+    """Find a list of proteins within an amino acid sequence """
+    current_prot = []
+    proteins = []
+
+    # For each amino acid in sequence
+    for aa in aa_seq:
+        # If aa is stop protein
+        if aa == "_":
+            # if current_prot exists...
+            # i.e. an entry exists in the current_prot list
+            if current_prot:
+                # For each protein in current_prot
+                for p in current_prot:
+                    # Append to proteins list
+                    proteins.append(p)
+                # clear current_prot
+                current_prot = []
+        else:
+            # If aa is start
+            if aa == "M":
+                # Append first protein to list
+                current_prot.append("")
+        
+            # For loop is necessary in case of multiple overlapping sequences
+            # i.e. MAAMC: current_prot = ["AAC", "C"]
+            for i in range(len(current_prot)):
+                current_prot[i] += aa
+
+    return proteins
