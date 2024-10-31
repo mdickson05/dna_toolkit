@@ -21,13 +21,15 @@ def print_information(input):
         print("[5] Reverse Complement:\n")
         print(f"5' {coloured(seq)} 3'")
         print(f"   {''.join(['|' for c in range(len(seq))])}")
-        complement_seq = complement(seq)
-        print(f"3' {coloured(complement_seq)} 5' [Complement]")
-        print(f"5' {coloured(complement_seq[::-1])} 3' [Reverse Complement]\n")
+        print(f"3' {coloured(complement(seq))} 5' [Complement]")
+        print(f"5' {coloured(reverse_complement(seq))} 3' [Reverse Complement]\n")
         print(f"[6] GC Content: {gc_content(seq)}%")
         print(f"[7] GC Content of subsequences (window size = 5): {gc_content_subseq(seq, 5)}")
         print(f"[8] Amino Acids Sequence from DNA sequence: {translate_seq(seq, 0)}")
-        print(f"[8] Codon frequency (L): {codon_frequency(seq, "L")}")
+        print(f"[9] Codon frequency (L): {codon_frequency(seq, "L")}")
+        print("[10] Reading frames:")
+        for frame in generate_reading_frames(seq):
+            print(frame)
         
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
@@ -77,6 +79,10 @@ def complement(seq):
         return complement
     else:
         print("Error: Invalid sequence - cannot find complement!")
+
+# Reverse complement - calls complement, reverses + returns output
+def reverse_complement(seq):
+    return complement(seq)[::-1]
 
 # Simple function to return GC content of an DNA sequence
 def gc_content(seq):
@@ -129,3 +135,18 @@ def codon_frequency(seq, amino_acid):
         # 2 at the end is to signify rounding to 2dp
         frequency_map[seq] = round(frequency_map[seq] / total_weight, 2)
     return frequency_map
+
+# Function to generate reading frames for imported sequence
+def generate_reading_frames(seq):
+    """Generates reading frames for imported sequence"""
+    frames = []
+    # Frames starting from each possible init_pos (without excluding data)
+    frames.append(translate_seq(seq, 0))
+    frames.append(translate_seq(seq, 1))
+    frames.append(translate_seq(seq, 2))
+    # Reverse complement frames
+    frames.append(translate_seq(reverse_complement(seq), 0))
+    frames.append(translate_seq(reverse_complement(seq), 1))
+    frames.append(translate_seq(reverse_complement(seq), 2))
+
+    return frames
