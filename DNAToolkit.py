@@ -3,12 +3,13 @@ from constants import *
 from utilities import coloured
 
 # Function to print information for a given DNA sequence
-def print_information(seq):
+def print_information(input):
     """Prints all information for an imported sequence"""
-    print("Sequence: " + coloured(seq))
-    isValid = validate_sequence(seq)
+    print("Sequence: " + coloured(input))
+    isValid = validate_sequence(input)
     print(f'[1] Is valid: {isValid}')
     if isValid:
+        seq = input.upper()
         print(f"[2] Length: {len(seq)}")
         print(coloured(f"[3] Nucleotide Frequencies: {count_nuc(seq)})"))
         print(f"[4] DNA -> RNA Transcription: {coloured(transcript_sequence(seq))}")
@@ -19,8 +20,9 @@ def print_information(seq):
         print("[5] Reverse Complement:\n")
         print(f"5' {coloured(seq)} 3'")
         print(f"   {''.join(['|' for c in range(len(seq))])}")
-        print(f"3' {coloured(reverse_complement(seq))} 5'\n")
-
+        complement_seq = complement(seq)
+        print(f"3' {coloured(complement_seq)} 5' [Complement]")
+        print(f"5' {coloured(complement_seq[::-1])} 3' [Reverse Complement]")
 
 # Simple check whether sequence is valid DNA string
 def validate_sequence(seq):
@@ -58,17 +60,15 @@ def transcript_sequence(seq):
     else:
         print("Error: Invalid sequence - cannot transcript!")
 
-# Reverse complement finder
-# Steps:
-# 1. Find complement string via nuc_complements
-# 2. Reverse the complement string
-def reverse_complement(seq):
+# Complement finder - Find complement string via nuc_complements
+def complement(seq):
     """Finds the reverse complement of an imported DNA sequence"""
     if validate_sequence(seq):
         complement = ''
         for nuc in seq:
             # Find the complement for the nucleotide, add it to the string
-            complement += nuc_complements[nuc]
-        return complement[::-1] # ::-1 to reverse (Python magic!)
+            # Ensures uppercase lettering
+            complement += nuc_complements[nuc.upper()]
+        return complement
     else:
         print("Error: Invalid sequence - cannot reverse complement!")
