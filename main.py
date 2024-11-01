@@ -1,22 +1,16 @@
 # Testing DNA Toolkit
-from DNAToolkit import *
 from sequences import sequence
 
+# Invalid string
+# test_string = "XXAX"
+# seq = sequence(string=test_string)
+# Valid but not all uppercase
+# test_string = "TgaC"
+# seq = sequence(string=test_string)
 
-
-
-# Always valid + uppercase
-# dna_string = input.upper()
-
-# Valid but not uppercase
-# dna_string = "AgTcAAc"
-
-# Invalid
-# dna_string = "Hello, world!"
-
-# Create new default sequence
+# Valid/Default
 seq = sequence()
-# Generate random values
+# Generate random DNA string
 seq.generate()
 # Print info for sequence
 seq.print_info()
