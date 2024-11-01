@@ -24,3 +24,31 @@ def coloured(seq):
             tmpStr += bcolors['reset'] + nuc
     # Return tmpStr with reset char at end to signify EOF
     return tmpStr + '\033[0;0m'
+
+# Read/write text files
+def readTextFile(path):
+    """Read text file from specified path"""
+    with open(path, 'r') as f:
+        return "".join([l.strip() for l in f.readlines()])
+    
+def writeTextFile(path, seq, mode="w"):
+    """Write/append imported sequence to specified file path"""
+    with open(path, mode) as f:
+        f.write(seq + "\n")
+
+# read FASTA files
+def read_FASTA(path):
+    with open(path, 'r') as f:
+        FASTAFile = [l.strip() for l in f.readlines()]
+
+    FASTADict = {}
+    FASTALabel = ""
+
+    for line in FASTAFile:
+        if '>' in line:
+            FASTALabel = line
+            FASTADict[FASTALabel] = ""
+        else:
+            FASTADict[FASTALabel] += line
+
+    return FASTADict
