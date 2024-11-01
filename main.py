@@ -11,7 +11,9 @@ from sequences import sequence
 # Valid/Default
 seq = sequence()
 # Generate random DNA string
-seq.generate()
+# seq.generate()
+# Generate random RNA string
+seq.generate(type="RNA")
 # Print info for sequence
 seq.print_info()
 

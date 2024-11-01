@@ -3,8 +3,16 @@
 # List of nucleotides: Adenine Guanine Thymine and Cytosine
 nucleotides = ["A", "G", "T", "C"]
 
+nucleotide_base = {
+    "DNA" : ["A", "T", "G", "C"],
+    "RNA" : ["A", "U", "G", "C"]
+}
+
 # Dictionary of complements: Maps each nucleotide to its complement
-nuc_complements = {"A" : "T", "G" : "C", "T" : "A", "C" : "G"}
+nuc_complements = {
+    "DNA" : {"A" : "T", "G" : "C", "T" : "A", "C" : "G"},
+    "RNA" : {"A" : "U", "G" : "C", "U" : "A", "C" : "G"}
+}
 
 # Copied directly from https://gitlab.com/RebelCoder/dna-toolset/
 dna_codons = {
@@ -30,4 +38,29 @@ dna_codons = {
     "TGG": "W",
     "TAT": "Y", "TAC": "Y",
     "TAA": "_", "TAG": "_", "TGA": "_"
+}
+
+rna_codons = {
+    # 'M' - START, '_' - STOP
+    "GCU": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+    "UGU": "C", "UGC": "C",
+    "GAU": "D", "GAC": "D",
+    "GAA": "E", "GAG": "E",
+    "UUU": "F", "UUC": "F",
+    "GGU": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+    "CAU": "H", "CAC": "H",
+    "AUA": "I", "AUU": "I", "AUC": "I",
+    "AAA": "K", "AAG": "K",
+    "UUA": "L", "UUG": "L", "CUU": "L", "CUC": "L", "CUA": "L", "CUG": "L",
+    "AUG": "M",
+    "AAU": "N", "AAC": "N",
+    "CCU": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+    "CAA": "Q", "CAG": "Q",
+    "CGU": "R", "CGC": "R", "CGA": "R", "CGG": "R", "AGA": "R", "AGG": "R",
+    "UCU": "S", "UCC": "S", "UCA": "S", "UCG": "S", "AGU": "S", "AGC": "S",
+    "ACU": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+    "GUU": "V", "GUC": "V", "GUA": "V", "GUG": "V",
+    "UGG": "W",
+    "UAU": "Y", "UAC": "Y",
+    "UAA": "_", "UAG": "_", "UGA": "_"
 }

@@ -14,10 +14,10 @@ class sequence:
         assert self.is_valid, f"Provided sequence is invalid: {self.seq}"
 
     # Generate random valid sequence
-    def generate(self, length=20, seq_type="DNA"):
+    def generate(self, length=20, type="DNA"):
         """Generate random valid sequence"""
-        seq = ''.join([random.choice(nucleotides) for nuc in range(length)])
-        self.__init__(seq, seq_type, "Randomly Generated Sequence")
+        seq = ''.join([random.choice(nucleotide_base[type]) for nuc in range(length)])
+        self.__init__(seq, type, "Randomly Generated Sequence")
 
 
     # Simple check whether sequence is valid DNA string
@@ -26,7 +26,7 @@ class sequence:
         # Ensure imported sequence is uppercase
         to_check = seq.upper()
         for nuc in to_check:
-            if nuc not in nucleotides:
+            if nuc not in nucleotide_base[self.type]:
                 return False
         return True
 
@@ -46,7 +46,10 @@ class sequence:
 
         print(f"[3] Nucleotide Frequency: {self.count_nuc()}")
 
-        print(f"[4] DNA -> RNA Transcription: {coloured(self.transcript())}")
+        if self.type == "DNA":
+            print(f"[4] DNA -> RNA Transcription: {coloured(self.transcript())}")
+        else:
+            print("[4] DNA -> RNA Transcription: Not a DNA sequence")
 
         # [5] was pretty much copied from this commit as it was awesome
         # https://gitlab.com/RebelCoder/dna-toolset/-/commit/8a4be0e3a70733be9bebdf0d9eed987c0fb44429
@@ -82,7 +85,10 @@ class sequence:
     # Function should return the frequency of each nucleotide
     def count_nuc(self):
         """Counts the nucleotide frequency within an imported DNA sequence"""
-        freq_dict = {"A" : 0, "G" : 0, "T" : 0, "C" : 0}
+        if self.type == "DNA":
+            freq_dict = {"A" : 0, "G" : 0, "T" : 0, "C" : 0}
+        elif self.type == "RNA":
+            freq_dict = {"A" : 0, "G" : 0, "U" : 0, "C" : 0}
         # Ensures dna_seq that is checked is in uppercase form
         # For each nucleotide, add to dict where key = nuc
         for nuc in self.seq:
@@ -93,7 +99,10 @@ class sequence:
     # TLDR: Replaces Thyamine with Uracil
     def transcript(self):
         """Transcripts an imported DNA sequence into its RNA counterpart"""
-        return self.seq.replace("T", "U")
+        if self.type == "DNA":
+            return self.seq.replace("T", "U")
+        else:
+            return "Not a valid DNA sequence - cannot transcript"
     
     # Complement finder - Find complement string via nuc_complements
     def complement(self, seq):
@@ -102,7 +111,7 @@ class sequence:
         for nuc in seq:
             # Find the complement for the nucleotide, add it to the string
             # Ensures uppercase lettering
-            complement += nuc_complements[nuc.upper()]
+            complement += nuc_complements[self.type][nuc.upper()]
         return complement
     
     # Reverse complement - calls complement, reverses + returns output
@@ -137,7 +146,10 @@ class sequence:
         # Starts at init_pos, finishes at len(seq) - 2 (to avoid reading 
         # past the last triplet), increments by 3.
         for pos in range(init_pos, len(seq) - 2, 3):
-            codons.append(dna_codons[seq[pos:pos+3]])
+            if self.type == "DNA":
+                codons.append(dna_codons[seq[pos:pos+3]])
+            elif self.type == "RNA":
+                codons.append(rna_codons[seq[pos:pos+3]])
         return codons
     
     # Function that returns a frequency map of an imported amino acid within a DNA sequence
@@ -149,9 +161,14 @@ class sequence:
             # Sequence to check is between i and i + 3
             to_check = self.seq[i:i+3]
             # If the codon value of to_check chars matches the imported amino_acid
-            if dna_codons[to_check] is amino_acid:
-                # add to temporary list
-                temp_list.append(to_check)
+            if self.type == "DNA":
+                if dna_codons[to_check] is amino_acid:
+                    # add to temporary list
+                    temp_list.append(to_check)
+            elif self.type == "RNA":
+                if rna_codons[to_check] is amino_acid:
+                    # add to temporary list
+                    temp_list.append(to_check)
 
         # Defines a dictionary where the keys are the values in temp_list
         # And the values are their count within that list
